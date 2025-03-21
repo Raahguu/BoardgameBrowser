@@ -1,0 +1,1 @@
+This is a uni project where you can browse through boardgames stored within a txt json file using either a CLI or a GUI

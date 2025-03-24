@@ -1,21 +1,16 @@
-# Name:  
-# Student Number:  
-
-# This file is provided to you as a starting point for the "game_browser.py" program of the Project
-# of Programming Principles in Semester 1, 2025.  It aims to give you just enough code to help ensure
-# that your program is well structured.  Please use this file as the basis of your work.
-# You are not required to reference it.
-
-# The "pass" command tells Python to do nothing.  It is simply a placeholder to ensure that the starter file runs smoothly.
-# They are not needed in your completed program.  Replace them with your own code as you complete the assignment.
-
+#Name: Joshua Kyle Finlayson
+#Student Number: 1069148
 
 # Import the necessary module(s).
 import tkinter, tkinter.messagebox, json
 
+#global variables
+global DATA_FILE_PATH
+DATA_FILE_PATH = "data.txt"
 
 
-class PrоgramGUI:
+
+class ProgramGUI:
 
     def __init__(self):
         # This is the constructor of the class.
@@ -38,9 +33,24 @@ class PrоgramGUI:
         pass
 
 
+#Code to run in Sequence
+
+#copied this over from admin.py
+# Here is where you attempt to open data.txt and read the data into a "data" variable.
+# If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
+data : list = []
+try:
+    #Create the file if it doesn't exist
+    open(DATA_FILE_PATH, "x")
+except:
+    with open(DATA_FILE_PATH, "r") as file:
+        #If the file is not empty
+        for i in file.readlines():
+            data += [json.loads(i)]
+        file.close()
 
 # Create an object of the ProgramGUI class to begin the program.
-gui = PrоgramGUI()
+gui = ProgramGUI()
 
 
 

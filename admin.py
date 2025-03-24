@@ -1,7 +1,7 @@
 #Name: Joshua Kyle Finlayson
 #Student Number: 1069148
 
-#Source: all boardgame data comes from https://boardgamegeek.com
+#Source: all the boardgame data was sourced from https://boardgamegeek.com
 
 # Import the necessary module(s).
 #This is an inbuilt module in python that allows python to parse and create JSON data 
@@ -97,7 +97,7 @@ def save_data(data : list):
 # If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
 data : list = []
 try:
-    #Create teh file if it doesn't exist
+    #Create the file if it doesn't exist
     open(DATA_FILE_PATH, "x")
 except:
     with open(DATA_FILE_PATH, "r") as file:
@@ -116,7 +116,7 @@ while True:
     print("\nChoose [a]dd, [l]ist, [s]earch, [v]iew, [d]elete or [q]uit.")
     choice = input('> ').lower().strip()
         
-    match choice:
+    match choice.split()[0]:
         case 'a':
             #Add new Boardgame
             new_data = {}
@@ -150,9 +150,13 @@ while True:
             if not data:
                 print("No boardgames saved")
                 continue
-            search_term = input_something("Enter a search term: ").lower()
-            search_results : list = []
 
+            if len(choice.split()) > 1:
+                search_term = "".join(choice.split()[1:])
+            else:
+                search_term = input_something("Enter a search term: ").lower()
+
+            search_results : list = []
             for i in range(len(data)):
                 if search_term in data[i]['name'].lower() or search_term in data[i]['desc'].lower():
                     search_results.append([i, data[i]])
@@ -170,7 +174,17 @@ while True:
             if not data:
                 print("No boardgames saved")
                 continue
-            num = input_int("Boardgame number to view: ", 1, len(data)) - 1
+
+            num = -1
+            if len(choice.split()) > 1:
+                str_num = "".join(choice.split()[1:])
+                if str_num.isdigit() and len(data) >= int(str_num) >= 1:
+                    num = int(str_num) - 1
+                else:
+                    print(f"{str_num} is not a valid input. Please try again")
+            if num == -1:
+                num = input_int("Boardgame number to view: ", 1, len(data)) - 1
+            
             print(f"{data[num]['name']} ({data[num]['year']})")
             print(data[num]['desc'])
             print(f"Players: {data[num]['players'][0]}-{data[num]['players'][1]}")
@@ -183,7 +197,17 @@ while True:
             if not data:
                 print("No boardgames saved")
                 continue
-            num = input_int("Enter boardgame number to delete: ", 1, len(data)) - 1
+
+            num = -1
+            if len(choice.split()) > 1:
+                str_num = "".join(choice.split()[1:])
+                if str_num.isdigit() and len(data) >= int(str_num) >= 1:
+                    num = int(str_num) - 1
+                else:
+                    print(f"{str_num} is not a valid input. Please try again")
+            if num == -1:
+                num = input_int("Enter boardgame number to delete: ", 1, len(data)) - 1
+            
             data.pop(num)
             print("Deleted boardgame")
 

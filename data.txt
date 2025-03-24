@@ -1,0 +1,12 @@
+{"name": "Catan", "year": 1995, "desc": "Collect and trade resources to build up the island of Catan in this modern classic.", "players": [3, 4], "playtime": [60, 120], "min_age": 10, "complexity": 2}
+{"name": "Forbidden Island", "year": 2010, "desc": "The island is sinking! Will the brave adventurers save the treasures in time?", "players": [2, 4], "playtime": [30, 45], "min_age": 10, "complexity": 2}
+{"name": "Forbidden Desert", "year": 2013, "desc": "Race to find the parts to an ancient flying machine before you succumb to the sand or sun", "players": [2, 5], "playtime": [30, 45], "min_age": 10, "complexity": 2}
+{"name": "Forbidden Sky", "year": 2018, "desc": "Work together to hotwire your getaway rocketship before the strom takes you out!", "players": [2, 5], "playtime": [45, 60], "min_age": 10, "complexity": 3}
+{"name": "Forbidden Jungle", "year": 2023, "desc": "Move through a shifting jungle in search of a portal toward home.", "players": [2, 5], "playtime": [30, 45], "min_age": 10, "complexity": 2}
+{"name": "Anomia", "year": 2010, "desc": "Card matching with words on the tip of your tongue...", "players": [3, 6], "playtime": [15, 30], "min_age": 10, "complexity": 1}
+{"name": "Cluedo", "year": 1949, "desc": "Catch the culprit of a crime by identifying who did it, with what, and where.", "players": [2, 6], "playtime": [45, 60], "min_age": 8, "complexity": 2}
+{"name": "Horrified", "year": 2019, "desc": "Classic movie monsters terrorize a town! Can your team stop them in time?", "players": [1, 5], "playtime": [45, 60], "min_age": 10, "complexity": 2}
+{"name": "Operation", "year": 1965, "desc": "Help the patient without hurting him!", "players": [1, 6], "playtime": [10, 15], "min_age": 6, "complexity": 1}
+{"name": "The Game of Life", "year": 1960, "desc": "Travel down life's road with its highs and lows as you try to amass a fortune.", "players": [2, 6], "playtime": [60, 80], "min_age": 8, "complexity": 1}
+{"name": "Monopoly", "year": 1935, "desc": "In this competitive real estate market, there's only one possible outcome: Monopoly!", "players": [2, 8], "playtime": [60, 180], "min_age": 8, "complexity": 2}
+{"name": "Kingdomino", "year": 2016, "desc": "Build a kingdom with vaired terrains on domino-shaped tiles in this fast family game.", "players": [2, 4], "playtime": [15, 25], "min_age": 8, "complexity": 1}

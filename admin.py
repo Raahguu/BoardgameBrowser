@@ -11,7 +11,7 @@ import json
 # to do calculations with regards to time and date
 from datetime import datetime
 
-#global variables
+#Global variables
 global DATA_FILE_PATH
 DATA_FILE_PATH = "data.txt"
 
@@ -35,10 +35,13 @@ def input_int(prompt : str, min_value : int = None, max_value : int = None):
             raise ValueError(f"max_value must be larger thanor equal to min_value\nmax_value: {max_value} \nmin_value: {min_value}")
     while True:
         inp = input_something(prompt)
-        if not inp.isdigit():
-            print("You need to input an integer (a whole number)")
+        try: 
+            if inp != int(inp):
+                raise ValueError
+            inp = int(inp)
+        except ValueError:
+            print(f"{inp} is not an integer (a whole number)")
             continue
-        inp = int(inp)
         if min_value:
             if inp < min_value:
                 print(f"The input cannot be less than {min_value}")
@@ -65,11 +68,14 @@ def input_range(prompt : str):
             print("You can only have one '-', so no negative numbers")
             continue
         [num1, num2] = inp.split("-")
-        if not num1.isdigit() or not num2.isdigit():
+        try:
+            if num1 != int(num1) or num2 != int(num2):
+                raise ValueError
+            num1 = int(num1)
+            num2 = int(num2)
+        except ValueError:
             print("You must input two integers on either side of the '-'")
             continue
-        num1 = int(num1)
-        num2 = int(num2)
         if num1 <= 0 or num2 <= 0:
             print("You must input positive numbers greater than zero")
             continue
@@ -83,7 +89,7 @@ def input_range(prompt : str):
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
 def save_data(data : list):
-    with open(DATA_FILE_PATH, "w") as file:
+    with open(DATA_FILE_PATH, "w+") as file:
         for i in data:
             json.dump(i, file)
             file.write("\n")
@@ -97,14 +103,14 @@ def save_data(data : list):
 # If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
 data : list = []
 try:
-    #Create the file if it doesn't exist
-    open(DATA_FILE_PATH, "x")
-except:
     with open(DATA_FILE_PATH, "r") as file:
         #If the file is not empty
         for i in file.readlines():
             data += [json.loads(i)]
         file.close()
+except:
+    #If the file does not exist
+    pass
 
 
 
@@ -114,9 +120,11 @@ print("Welcome to Joshua's Boardgame Catalogue Admin Program.")
 
 while True:
     print("\nChoose [a]dd, [l]ist, [s]earch, [v]iew, [d]elete or [q]uit.")
-    choice = input('> ').lower().strip()
+    print("""For (s)earch, (v)iew, and (d)elete if you type the specifier after the letter the command runs. 
+          (e.g. 's Hello' searches for the 'Hello' term)""")
+    inp = input('> ').lower().strip()
         
-    match choice.split()[0]:
+    match inp.split()[0]:
         case 'a':
             #Add new Boardgame
             new_data = {}
@@ -147,20 +155,25 @@ while True:
 
         case 's':
             #Serch for Boardgames through name and description 
+            #In the case there is no data
             if not data:
                 print("No boardgames saved")
                 continue
 
-            if len(choice.split()) > 1:
-                search_term = "".join(choice.split()[1:])
+            #Get search term
+            if len(inp.split()) > 1:
+                search_term = "".join(inp.split()[1:])
             else:
-                search_term = input_something("Enter a search term: ").lower()
+                search_term = input_something("Enter a search term: ")
+            search_term = search_term.lower()
 
+            #Actually search
             search_results : list = []
             for i in range(len(data)):
                 if search_term in data[i]['name'].lower() or search_term in data[i]['desc'].lower():
                     search_results.append([i, data[i]])
 
+            #Display results
             if not search_results:
                 print("No results found")
                 continue
@@ -171,20 +184,33 @@ while True:
 
         case 'v':
             #View a specific Boardgame
+            #in case there is no data
             if not data:
                 print("No boardgames saved")
                 continue
-
-            num = -1
-            if len(choice.split()) > 1:
-                str_num = "".join(choice.split()[1:])
-                if str_num.isdigit() and len(data) >= int(str_num) >= 1:
-                    num = int(str_num) - 1
-                else:
-                    print(f"{str_num} is not a valid input. Please try again")
-            if num == -1:
-                num = input_int("Boardgame number to view: ", 1, len(data)) - 1
             
+            #Get num
+            num = -1
+            if len(inp.split()) > 1:
+                str_num = "".join(inp.split()[1:])
+                try:
+                    num = int(str_num)
+                    #Checks if the number was a float
+                    if num != float(str_num):
+                        #Throw error
+                        raise ValueError
+                    #check it is in the correct range
+                    if 9 >= num >= 1:
+                        num = num - 1
+                    else: raise IndexError
+                except ValueError:
+                    print(f"{str_num} is not an integer. Please try again")
+                except IndexError:
+                    print(f"{str_num} is not within the correct range ({1}-{9})")
+            if num == -1:
+                num = input("Boardgame number to view: ") - 1
+            
+            #Display results
             print(f"{data[num]['name']} ({data[num]['year']})")
             print(data[num]['desc'])
             print(f"Players: {data[num]['players'][0]}-{data[num]['players'][1]}")
@@ -198,15 +224,26 @@ while True:
                 print("No boardgames saved")
                 continue
 
+            #Get num
             num = -1
-            if len(choice.split()) > 1:
-                str_num = "".join(choice.split()[1:])
-                if str_num.isdigit() and len(data) >= int(str_num) >= 1:
-                    num = int(str_num) - 1
-                else:
-                    print(f"{str_num} is not a valid input. Please try again")
+            if len(inp.split()) > 1:
+                str_num = "".join(inp.split()[1:])
+                try:
+                    num = int(str_num)
+                    #Checks if the number was a float
+                    if num != float(str_num):
+                        #Throw error
+                        raise ValueError
+                    #check it is in the correct range
+                    if 9 >= num >= 1:
+                        num = num - 1
+                    else: raise IndexError
+                except ValueError:
+                    print(f"{str_num} is not an integer. Please try again")
+                except IndexError:
+                    print(f"{str_num} is not within the correct range ({1}-{9})")
             if num == -1:
-                num = input_int("Enter boardgame number to delete: ", 1, len(data)) - 1
+                num = input("Boardgame number to delete: ") - 1
             
             data.pop(num)
             print("Deleted boardgame")

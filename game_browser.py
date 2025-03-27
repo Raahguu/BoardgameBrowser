@@ -4,7 +4,7 @@
 # Import the necessary module(s).
 import tkinter, tkinter.messagebox, json
 
-#global variables
+#Global variables
 global DATA_FILE_PATH
 DATA_FILE_PATH = "data.txt"
 

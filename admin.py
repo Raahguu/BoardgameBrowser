@@ -88,9 +88,7 @@ def input_range(prompt : str):
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
 def save_data(data : list):
     with open(DATA_FILE_PATH, "w+") as file:
-        for i in data:
-            json.dump(i, file)
-            file.write("\n")
+        json.dump(data, file, indent = 1)
         file.close()
 
 
@@ -99,13 +97,24 @@ def save_data(data : list):
 data : list = []
 try:
     with open(DATA_FILE_PATH, "r") as file:
-        #If the file is not empty
-        for i in file.readlines():
-            data += [json.loads(i)]
+        #If the file is empty
+        data = json.load(file)
         file.close()
-except:
+except FileNotFoundError:
     #If the file does not exist
-    pass
+    print(f"WARNING: The storage file {DATA_FILE_PATH} does not exist.")
+except json.decoder.JSONDecodeError:
+    #If the file is empty
+    print(f"WARNING: The file {DATA_FILE_PATH} is empty")
+except NotADirectoryError:
+    print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
+    raise NotADirectoryError
+except PermissionError:
+    print(f"ERROR: The program does not have the proper permissions to access {DATA_FILE_PATH}")
+    raise PermissionError
+except EOFError:
+    print(f"ERROR: {DATA_FILE_PATH} ends early likely due to incorrect JSON syntax")
+    raise EOFError
 
 
 # Print welcome message, then enter the endless loop which prompts the user for a choice.

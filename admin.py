@@ -11,8 +11,7 @@ import json
 # to do calculations with regards to time and date
 from datetime import datetime
 
-#Global variables
-global DATA_FILE_PATH
+#Global constant
 DATA_FILE_PATH = "data.txt"
 
 # This function repeatedly prompts for input until something other than whitespace is entered.
@@ -86,8 +85,8 @@ def input_range(prompt : str):
 
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
-def save_data(data : list):
-    with open(DATA_FILE_PATH, "w+") as file:
+def save_data(data : list, file_path):
+    with open(file_path, "w+") as file:
         json.dump(data, file, indent = 1)
         file.close()
 
@@ -105,7 +104,7 @@ except FileNotFoundError:
     print(f"WARNING: The storage file {DATA_FILE_PATH} does not exist.")
 except json.decoder.JSONDecodeError:
     #If the file is empty
-    print(f"WARNING: The file {DATA_FILE_PATH} is empty")
+    print(f"WARNING: The JSON code in {DATA_FILE_PATH} is invalid")
 except NotADirectoryError:
     print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
     raise NotADirectoryError
@@ -115,6 +114,8 @@ except PermissionError:
 except EOFError:
     print(f"ERROR: {DATA_FILE_PATH} ends early likely due to incorrect JSON syntax")
     raise EOFError
+if data == []:
+    print(f"WARNING: The file {DATA_FILE_PATH} was empty")
 
 
 # Print welcome message, then enter the endless loop which prompts the user for a choice.
@@ -144,7 +145,7 @@ while True:
 
             data += [new_data]
             print(f"{new_data['name']} added")
-            save_data(data)
+            save_data(data, DATA_FILE_PATH)
 
         case 'l':
             #List all Boardgames
@@ -254,7 +255,7 @@ while True:
             del data[num]
             print("Deleted boardgame")
 
-            save_data(data)
+            save_data(data, DATA_FILE_PATH)
 
         case 'q':
             #Quit the program

@@ -36,20 +36,18 @@ def input_int(prompt : str, min_value : int = None, max_value : int = None):
     while True:
         inp = input_something(prompt)
         try: 
-            if inp != int(inp):
+            if int(inp) != float(inp):
                 raise ValueError
             inp = int(inp)
         except ValueError:
             print(f"{inp} is not an integer (a whole number)")
             continue
-        if min_value:
-            if inp < min_value:
-                print(f"The input cannot be less than {min_value}")
-                continue
-        if max_value:
-            if inp > max_value:
-                print(f"The input cannot be more than {max_value}")
-                continue
+        if min_value != None and inp < min_value:
+            print(f"The input cannot be less than {min_value}")
+            continue
+        if max_value != None and inp > max_value:
+            print(f"The input cannot be more than {max_value}")
+            continue
         return inp
 
 
@@ -69,7 +67,7 @@ def input_range(prompt : str):
             continue
         [num1, num2] = inp.split("-")
         try:
-            if num1 != int(num1) or num2 != int(num2):
+            if int(num1) != float(num1) or int(num2) != float(num2):
                 raise ValueError
             num1 = int(num1)
             num2 = int(num2)
@@ -96,9 +94,6 @@ def save_data(data : list):
         file.close()
 
 
-
-
-
 # Here is where you attempt to open data.txt and read the data into a "data" variable.
 # If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
 data : list = []
@@ -113,15 +108,13 @@ except:
     pass
 
 
-
-
 # Print welcome message, then enter the endless loop which prompts the user for a choice.
 print("Welcome to Joshua's Boardgame Catalogue Admin Program.")
 
 while True:
     print("\nChoose [a]dd, [l]ist, [s]earch, [v]iew, [d]elete or [q]uit.")
-    print("""For (s)earch, (v)iew, and (d)elete if you type the specifier after the letter the command runs. 
-          (e.g. 's Hello' searches for the 'Hello' term)""")
+    print("For (s)earch, (v)iew, and (d)elete if you type the specifier after the letter the command runs.\n"
+          "(e.g. 's Hello' searches for the 'Hello' term)")
     inp = input('> ').lower().strip()
         
     match inp.split()[0]:
@@ -200,13 +193,15 @@ while True:
                         #Throw error
                         raise ValueError
                     #check it is in the correct range
-                    if 9 >= num >= 1:
+                    if len(data) >= num >= 1:
                         num = num - 1
                     else: raise IndexError
                 except ValueError:
                     print(f"{str_num} is not an integer. Please try again")
+                    num = -1
                 except IndexError:
                     print(f"{str_num} is not within the correct range ({1}-{9})")
+                    num = -1
             if num == -1:
                 num = input("Boardgame number to view: ") - 1
             
@@ -235,17 +230,19 @@ while True:
                         #Throw error
                         raise ValueError
                     #check it is in the correct range
-                    if 9 >= num >= 1:
+                    if len(data) >= num >= 1:
                         num = num - 1
                     else: raise IndexError
                 except ValueError:
                     print(f"{str_num} is not an integer. Please try again")
+                    num = -1
                 except IndexError:
                     print(f"{str_num} is not within the correct range ({1}-{9})")
+                    num = -1
             if num == -1:
                 num = input("Boardgame number to delete: ") - 1
             
-            data.pop(num)
+            del data[num]
             print("Deleted boardgame")
 
             save_data(data)

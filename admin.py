@@ -1,7 +1,8 @@
 #Name: Joshua Kyle Finlayson
 #Student Number: 1069148
 
-#Source: all the boardgame data was sourced from https://boardgamegeek.com
+#Source: all the boardgame data was sourced from:
+# (n.d.). BoardGameGeek. https://boardgamegeek.com
 
 # Import the necessary module(s).
 #This is an inbuilt module in python that allows python to parse and create JSON data 

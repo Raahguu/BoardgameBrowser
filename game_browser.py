@@ -59,6 +59,7 @@ class ProgramGUI:
                                          anchor="n")
         self.title_label.pack(side="top", anchor="center")
 
+        #local function to make each of the entry lines
         def make_entries(window, label_text):
             frame = tkinter.ttk.Frame(window)
             frame.pack()
@@ -129,6 +130,7 @@ class ProgramGUI:
                 return
         
         #Now do search stuff
+        #This is statement is so complicated becuase it is three ternary statements inside a single if statment to avoid nesting ifs, or repeating code
         self.search_results = []
         for i, game in enumerate(self.data):
             if (((game['players'][0] <= num_players <= game['players'][1]) if num_players != "" else True)

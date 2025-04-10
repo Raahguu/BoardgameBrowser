@@ -21,9 +21,9 @@ def input_something(prompt : str):
         prompt += "\n> "
     while True:
         inp = input(prompt).strip()
-        if not inp:
-            print("Sorry, you didn't seem to input anything there. Please try again")
-        return inp
+        if inp:
+            return inp
+        print("Sorry, you didn't seem to input anything there. Please try again")
 
 
 
@@ -82,7 +82,14 @@ def input_range(prompt : str):
             continue
         return [num1, num2]
 
-
+def input_not_int(prompt):
+    while True:
+        inp = input_something(prompt)
+        try:
+            inp = float(inp)
+            print("Please input a string, not a number")
+        except:
+            return inp
 
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
@@ -103,9 +110,11 @@ try:
 except FileNotFoundError:
     #If the file does not exist
     print(f"WARNING: The storage file {DATA_FILE_PATH} does not exist.")
+    raise ValueError
 except json.decoder.JSONDecodeError:
     #If the file is empty
     print(f"WARNING: The JSON code in {DATA_FILE_PATH} is invalid")
+    raise TypeError
 except NotADirectoryError:
     print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
     raise NotADirectoryError
@@ -115,6 +124,9 @@ except PermissionError:
 except EOFError:
     print(f"ERROR: {DATA_FILE_PATH} ends early likely due to incorrect JSON syntax")
     raise EOFError
+except Exception as e:
+    print("Some Not handeld error occured")
+    raise e
 if data == []:
     print(f"WARNING: The file {DATA_FILE_PATH} was empty")
 
@@ -132,13 +144,13 @@ while True:
         case 'a':
             #Add new Boardgame
             new_data = {}
-            new_data['name'] = input_something("Enter boardgame name: ")
+            new_data['name'] = input_not_int("Enter boardgame name: ")
             #The datetime.now().year gets the current year
             #This is becuase a baordgame can't be created in the future
             #but in order to future proof the program the number '2025' cant just be written there
             #and the number '0' is there under the assumption that all games will be from A.D./C.E.
             new_data['year'] = input_int("Enter relase year: ", 0, datetime.now().year)
-            new_data['desc'] = input_something("Enter a short description: ")
+            new_data['desc'] = input_not_int("Enter a short description: ")
             new_data['players'] = input_range("Enter number of players as a range e.g. 1-4: ")
             new_data['playtime'] = input_range("Enter playtime in minutes as a range e.g. 15-30: ")
             new_data['min_age'] = input_int("Enter the minimum recommended playing age: ", 0)
@@ -214,7 +226,7 @@ while True:
                     print(f"{str_num} is not within the correct range ({1}-{9})")
                     num = -1
             if num == -1:
-                num = input("Boardgame number to view: ") - 1
+                num = input_int("Boardgame number to view: ", 1, len(data)) - 1
             
             #Display results
             print(f"{data[num]['name']} ({data[num]['year']})")
@@ -251,7 +263,7 @@ while True:
                     print(f"{str_num} is not within the correct range ({1}-{9})")
                     num = -1
             if num == -1:
-                num = input("Boardgame number to delete: ") - 1
+                num = input_int("Boardgame number to delete: ", 1, len(data)) - 1
             
             del data[num]
             print("Deleted boardgame")

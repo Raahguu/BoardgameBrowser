@@ -47,7 +47,7 @@
  {
   "name": "Forbidden Sky",
   "year": 2018,
-  "desc": "Work together to hotwire your getaway rocketship before the strom takes you out!",
+  "desc": "Work together to hotwire your getaway rocket ship before the storm takes you out!",
   "players": [
    2,
    5

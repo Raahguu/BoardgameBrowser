@@ -82,7 +82,7 @@ def input_range(prompt : str):
             continue
         return [num1, num2]
 
-def input_not_int(prompt):
+def input_not_int(prompt: str):
     while True:
         inp = input_something(prompt)
         try:
@@ -93,11 +93,36 @@ def input_not_int(prompt):
 
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
-def save_data(data : list, file_path):
+def save_data(data: list, file_path: str):
     with open(file_path, "w+") as file:
         json.dump(data, file, indent = 1)
-        file.close()
 
+#A function to handel the input parsing for single line viewing and deleting, only handels numbers
+def single_line_input_parsing(data: list, incorrect_prompt: str):
+    #Get num
+    num = -1
+    if len(inp.split()) > 1:
+        str_num = "".join(inp.split()[1:])
+        try:
+            num = int(str_num)
+            #Checks if the number was a float
+            if num != float(str_num):
+                #Throw error
+                raise ValueError
+            #check it is in the correct range
+            if len(data) >= num >= 1:
+                num = num - 1
+            else: raise IndexError
+        except ValueError:
+            print(f"{str_num} is not an integer. Please try again")
+            num = -1
+        except IndexError:
+            print(f"{str_num} is not within the correct range ({1}-{9})")
+            num = -1
+    if num == -1:
+        num = input_int(incorrect_prompt, 1, len(data)) - 1
+    
+    return num
 
 # Here is where you attempt to open data.txt and read the data into a "data" variable.
 # If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
@@ -106,7 +131,6 @@ try:
     with open(DATA_FILE_PATH, "r") as file:
         #If the file is empty
         data = json.load(file)
-        file.close()
 except FileNotFoundError:
     #If the file does not exist
     print(f"WARNING: The storage file {DATA_FILE_PATH} does not exist.")
@@ -129,7 +153,6 @@ except Exception as e:
     raise e
 if data == []:
     print(f"WARNING: The file {DATA_FILE_PATH} was empty")
-
 
 # Print welcome message, then enter the endless loop which prompts the user for a choice.
 print("Welcome to Joshua's Boardgame Catalogue Admin Program.")
@@ -205,28 +228,7 @@ while True:
                 print("No boardgames saved")
                 continue
             
-            #Get num
-            num = -1
-            if len(inp.split()) > 1:
-                str_num = "".join(inp.split()[1:])
-                try:
-                    num = int(str_num)
-                    #Checks if the number was a float
-                    if num != float(str_num):
-                        #Throw error
-                        raise ValueError
-                    #check it is in the correct range
-                    if len(data) >= num >= 1:
-                        num = num - 1
-                    else: raise IndexError
-                except ValueError:
-                    print(f"{str_num} is not an integer. Please try again")
-                    num = -1
-                except IndexError:
-                    print(f"{str_num} is not within the correct range ({1}-{9})")
-                    num = -1
-            if num == -1:
-                num = input_int("Boardgame number to view: ", 1, len(data)) - 1
+            num = single_line_input_parsing(data, "Boardgame number to view: ")
             
             #Display results
             print(f"{data[num]['name']} ({data[num]['year']})")
@@ -243,27 +245,7 @@ while True:
                 continue
 
             #Get num
-            num = -1
-            if len(inp.split()) > 1:
-                str_num = "".join(inp.split()[1:])
-                try:
-                    num = int(str_num)
-                    #Checks if the number was a float
-                    if num != float(str_num):
-                        #Throw error
-                        raise ValueError
-                    #check it is in the correct range
-                    if len(data) >= num >= 1:
-                        num = num - 1
-                    else: raise IndexError
-                except ValueError:
-                    print(f"{str_num} is not an integer. Please try again")
-                    num = -1
-                except IndexError:
-                    print(f"{str_num} is not within the correct range ({1}-{9})")
-                    num = -1
-            if num == -1:
-                num = input_int("Boardgame number to delete: ", 1, len(data)) - 1
+            num = single_line_input_parsing(data, "Boardgame number to delete: ")
             
             del data[num]
             print("Deleted boardgame")

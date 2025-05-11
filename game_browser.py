@@ -2,8 +2,7 @@
 #Student Number: 1069148
 
 # Import the necessary module(s).
-import tkinter, tkinter.messagebox, json
-import tkinter.ttk
+import tkinter, json, tkinter.messagebox
 
 #Global constant
 DATA_FILE_PATH = "data.txt"
@@ -24,7 +23,6 @@ class ProgramGUI:
             with open(self.file_path, "r") as file:
                 #If the file is empty
                 self.data = json.load(file)
-                file.close()
         except FileNotFoundError:
             #If the file does not exist
             self.error_box(f"The storage file {self.file_path} does not exist.")
@@ -43,7 +41,7 @@ class ProgramGUI:
             self.error_box(f"{self.file_path} ends early likely due to incorrect JSON syntax")
             return
         except Exception as e:
-            self.error_box(f"A non handeled error occured\n{e}")
+            self.error_box(f"A non handled error occurred\n{e}")
             return
         
         if self.data == []:
@@ -61,7 +59,7 @@ class ProgramGUI:
 
         #local function to make each of the entry lines
         def make_entries(window, label_text):
-            frame = tkinter.ttk.Frame(window)
+            frame = tkinter.Frame(window)
             frame.pack()
             label = tkinter.Label(frame, text=label_text, justify="right", width=18)
             label.pack(side="left")
@@ -77,12 +75,12 @@ class ProgramGUI:
         self.search_button = tkinter.Button(self.root, text="Search", command=self.search, width=10)
         self.search_button.pack(side="top")
 
-        #Search Results frame
+        #Search Results
         self.search_results_title = tkinter.Label(self.root, text="Search Results", fg="blue", font=('Aptos', 16, 'bold'))
         self.search_results_title.pack(side="top", pady=(20, 0))
 
         #Inner search reuslts frame for buttons
-        self.search_results_frame = tkinter.ttk.Frame(self.root)
+        self.search_results_frame = tkinter.Frame(self.root)
         self.search_results_frame.pack(fill="both", expand=True)
         temp_label = tkinter.Label(self.search_results_frame, text="Form not submitted.", state='disabled')
         temp_label.pack(side="top")
@@ -107,8 +105,8 @@ class ProgramGUI:
                 if int(num_players) != float(num_players): raise TypeError
                 num_players = int(num_players)
                 if num_players <= 0: raise ValueError
-            except:
-                self.error_box(f"The number of players playing need to be a whole number greater than zero")
+            except (TypeError, ValueError):
+                self.error_box(f"The number of players playing needs to be a whole number greater than zero")
                 return
         
         if time_available != "":
@@ -116,8 +114,8 @@ class ProgramGUI:
                 if int(time_available) != float(time_available): raise TypeError
                 time_available = int(time_available)
                 if time_available <= 0: raise ValueError
-            except:
-                self.error_box(f"The time avilable needs to be a whole number greater than zero")
+            except (TypeError, ValueError):
+                self.error_box(f"The time available needs to be a whole number greater than zero")
                 return
         
         if youngest != "":
@@ -125,7 +123,7 @@ class ProgramGUI:
                 if int(youngest) != float(youngest): raise TypeError
                 youngest = int(youngest)
                 if youngest < 0: raise ValueError
-            except:
+            except (TypeError, ValueError):
                 self.error_box(f"The youngest player's age needs to be a whole positive number")
                 return
         

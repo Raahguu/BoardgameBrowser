@@ -16,7 +16,6 @@ class ProgramGUI:
         self.root = tkinter.Tk()
         self.root.title("Game Browser")
 
-
         #Get file Data
         self.file_path = file_path
         try:
@@ -43,9 +42,9 @@ class ProgramGUI:
         except Exception as e:
             self.error_box(f"A non handled error occurred\n{e}")
             return
-        
-        if self.data == []:
-            self.warning_box(f"The file {self.file_path} was empty")
+        else:
+            if not self.data:
+                self.warning_box(f"The file {self.file_path} was empty")
 
 
         #Create the rest of the TK window stuff

@@ -94,11 +94,27 @@ def input_not_int(prompt: str):
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
 def save_data(data: list, file_path: str):
-    with open(file_path, "w+") as file:
-        json.dump(data, file, indent = 1)
+    error_thrown = False
+    try:
+        with open(file_path, "w+") as file:
+            json.dump(data, file, indent = 4)
+    except NotADirectoryError:
+        print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
+        error_thrown = True
+    except PermissionError:
+        print(f"ERROR: The program does not have the proper permissions to access {DATA_FILE_PATH}")
+        error_thrown = True
+    except Exception as e:
+        print("Some Not handeld error occured")
+        print(e)
+        error_thrown = True
+    finally:
+        if error_thrown: print("As a result, the data was not saved")
+        return error_thrown
+        
 
 #A function to handel the input parsing for single line viewing and deleting, only handels numbers
-def single_line_input_parsing(data: list, incorrect_prompt: str):
+def single_line_input_parsing(data: list, inp : str, incorrect_prompt: str):
     #Get num
     num = -1
     if len(inp.split()) > 1:
@@ -117,7 +133,7 @@ def single_line_input_parsing(data: list, incorrect_prompt: str):
             print(f"{str_num} is not an integer. Please try again")
             num = -1
         except IndexError:
-            print(f"{str_num} is not within the correct range ({1}-{9})")
+            print(f"{str_num} is not within the correct range ({1}-{len(data)})")
             num = -1
     if num == -1:
         num = input_int(incorrect_prompt, 1, len(data)) - 1
@@ -126,7 +142,7 @@ def single_line_input_parsing(data: list, incorrect_prompt: str):
 
 # Here is where you attempt to open data.txt and read the data into a "data" variable.
 # If the file does not exist or does not contain JSON data, set "data" to an empty list instead.
-data : list = []
+data = []
 try:
     with open(DATA_FILE_PATH, "r") as file:
         #If the file is empty
@@ -134,25 +150,21 @@ try:
 except FileNotFoundError:
     #If the file does not exist
     print(f"WARNING: The storage file {DATA_FILE_PATH} does not exist.")
-    raise ValueError
 except json.decoder.JSONDecodeError:
     #If the file is empty
     print(f"WARNING: The JSON code in {DATA_FILE_PATH} is invalid")
-    raise TypeError
 except NotADirectoryError:
     print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
-    raise NotADirectoryError
 except PermissionError:
     print(f"ERROR: The program does not have the proper permissions to access {DATA_FILE_PATH}")
-    raise PermissionError
 except EOFError:
     print(f"ERROR: {DATA_FILE_PATH} ends early likely due to incorrect JSON syntax")
-    raise EOFError
 except Exception as e:
     print("Some Not handeld error occured")
-    raise e
-if data == []:
-    print(f"WARNING: The file {DATA_FILE_PATH} was empty")
+    print(e)
+else:
+    if not data:
+        print(f"WARNING: The file {DATA_FILE_PATH} was empty")
 
 # Print welcome message, then enter the endless loop which prompts the user for a choice.
 print("Welcome to Joshua's Boardgame Catalogue Admin Program.")
@@ -173,6 +185,17 @@ while True:
             #but in order to future proof the program the number '2025' cant just be written there
             #and the number '0' is there under the assumption that all games will be from A.D./C.E.
             new_data['year'] = input_int("Enter relase year: ", 0, datetime.now().year)
+            
+            #Check to make sure this game isn't already in the data
+            already_in = False
+            for d in data:
+                if d['name'].lower() == new_data['name'].lower() and d['year'] == new_data['year']:
+                    already_in = True
+            if already_in:
+                print("A game of that name and release year already exists within the data")
+                continue
+                    
+            #continue collecting game data
             new_data['desc'] = input_not_int("Enter a short description: ")
             new_data['players'] = input_range("Enter number of players as a range e.g. 1-4: ")
             new_data['playtime'] = input_range("Enter playtime in minutes as a range e.g. 15-30: ")
@@ -207,7 +230,7 @@ while True:
             search_term = search_term.lower()
 
             #Actually search
-            search_results : list = []
+            search_results = []
             for i in range(len(data)):
                 if search_term in data[i]['name'].lower() or search_term in data[i]['desc'].lower():
                     search_results.append([i, data[i]])
@@ -228,7 +251,7 @@ while True:
                 print("No boardgames saved")
                 continue
             
-            num = single_line_input_parsing(data, "Boardgame number to view: ")
+            num = single_line_input_parsing(data, inp, "Boardgame number to view: ")
             
             #Display results
             print(f"{data[num]['name']} ({data[num]['year']})")
@@ -245,7 +268,7 @@ while True:
                 continue
 
             #Get num
-            num = single_line_input_parsing(data, "Boardgame number to delete: ")
+            num = single_line_input_parsing(data, inp, "Boardgame number to delete: ")
             
             del data[num]
             print("Deleted boardgame")

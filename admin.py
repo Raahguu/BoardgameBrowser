@@ -89,7 +89,7 @@ def input_not_int(prompt: str):
             inp = float(inp)
             print("Please input a string, not a number")
         except:
-            return inp
+            return
 
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
@@ -224,7 +224,7 @@ while True:
 
             #Get search term
             if len(inp.split()) > 1:
-                search_term = "".join(inp.split()[1:])
+                search_term = inp.split(" ", maxsplit=1)[1]
             else:
                 search_term = input_something("Enter a search term: ")
             search_term = search_term.lower()

@@ -25,9 +25,6 @@ def input_something(prompt : str):
             return inp
         print("Sorry, you didn't seem to input anything there. Please try again")
 
-
-
-
 # This function repeatedly prompts for input until a float with a minimum of 0 is entered.
 def input_int(prompt : str, min_value : int = None, max_value : int = None):
     if min_value and max_value:
@@ -49,9 +46,6 @@ def input_int(prompt : str, min_value : int = None, max_value : int = None):
             print(f"The input cannot be more than {max_value}")
             continue
         return inp
-
-
-
 
 # This function repeatedly prompts for input until the user enters two integers with a dash between them.
 def input_range(prompt : str):
@@ -91,7 +85,6 @@ def input_not_int(prompt: str):
         except:
             return
 
-
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
 def save_data(data: list, file_path: str):
     error_thrown = False
@@ -110,8 +103,7 @@ def save_data(data: list, file_path: str):
         error_thrown = True
     finally:
         if error_thrown: print("As a result, the data was not saved")
-        return error_thrown
-        
+        return error_thrown        
 
 #A function to handel the input parsing for single line viewing and deleting, only handels numbers
 def single_line_input_parsing(data: list, inp : str, incorrect_prompt: str):
@@ -283,8 +275,5 @@ while True:
         case _: 
             #Else display an error message
             print("Invalid Choice. \nPlease try again.")
-
-
-
 
 # If you have been paid to write this program, please delete this comment

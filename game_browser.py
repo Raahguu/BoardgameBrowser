@@ -101,29 +101,26 @@ class ProgramGUI:
         #error checking
         if num_players != "":
             try:
-                if int(num_players) != float(num_players): raise TypeError
                 num_players = int(num_players)
                 if num_players <= 0: raise ValueError
             except (TypeError, ValueError):
-                self.error_box(f"The number of players playing needs to be a whole number greater than zero, and less then 10 quadrillion")
+                self.error_box(f"The number of players playing needs to be a whole number greater than zero")
                 return
         
         if time_available != "":
             try:
-                if int(time_available) != float(time_available): raise TypeError
                 time_available = int(time_available)
                 if time_available <= 0: raise ValueError
             except (TypeError, ValueError):
-                self.error_box(f"The time available needs to be a whole number greater than zero, and less then 19 billion years")
+                self.error_box(f"The time available needs to be a whole number greater than zero")
                 return
         
         if youngest != "":
             try:
-                if int(youngest) != float(youngest): raise TypeError
                 youngest = int(youngest)
                 if youngest < 0: raise ValueError
             except (TypeError, ValueError):
-                self.error_box(f"The youngest player's age needs to be a whole positive number less then 10 quadrillion years")
+                self.error_box(f"The youngest player's age needs to be a whole positive number")
                 return
         
         #Now do search stuff

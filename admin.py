@@ -1,14 +1,11 @@
 #Name: Joshua Kyle Finlayson
 #Student Number: 1069148
 
-#Source: all the boardgame data was sourced from:
-# (n.d.). BoardGameGeek. https://boardgamegeek.com
-
 # Import the necessary module(s).
-#This is an inbuilt module in python that allows python to parse and create JSON data 
+# This is an inbuilt module in python that allows python to parse and create JSON data 
 # which is a type of organising data based on javascript objects
 import json
-#This is an inbuilt python module that allows the program 
+# This is an inbuilt python module that allows the program 
 # to do calculations with regards to time and date
 from datetime import datetime
 
@@ -83,7 +80,7 @@ def input_not_int(prompt: str):
             inp = float(inp)
             print("Please input a string, not a number")
         except:
-            return
+            return inp
 
 # This function opens "data.txt" in write mode and writes the data to it in JSON format.
 def save_data(data: list, file_path: str):
@@ -105,7 +102,7 @@ def save_data(data: list, file_path: str):
         if error_thrown: print("As a result, the data was not saved")
         return error_thrown        
 
-#A function to handel the input parsing for single line viewing and deleting, only handels numbers
+# A function to handel the input parsing for single line viewing and deleting, only handels numbers
 def single_line_input_parsing(data: list, inp : str, incorrect_prompt: str):
     #Get num
     num = -1
@@ -145,18 +142,19 @@ except FileNotFoundError:
 except json.decoder.JSONDecodeError:
     #If the file is empty
     print(f"WARNING: The JSON code in {DATA_FILE_PATH} is invalid")
-except NotADirectoryError:
+except NotADirectoryError as e:
     print(f"ERROR: the directory for {DATA_FILE_PATH} is invalid")
-except PermissionError:
+    raise e
+except PermissionError as e:
     print(f"ERROR: The program does not have the proper permissions to access {DATA_FILE_PATH}")
+    raise e
 except EOFError:
     print(f"ERROR: {DATA_FILE_PATH} ends early likely due to incorrect JSON syntax")
 except Exception as e:
     print("Some Not handeld error occured")
-    print(e)
-else:
-    if not data:
-        print(f"WARNING: The file {DATA_FILE_PATH} was empty")
+    raise e
+if not data:
+    print(f"WARNING: No data has been loaded from {DATA_FILE_PATH}")
 
 # Print welcome message, then enter the endless loop which prompts the user for a choice.
 print("Welcome to Joshua's Boardgame Catalogue Admin Program.")
@@ -203,9 +201,10 @@ while True:
             if not data:
                 print("No boardgames saved")
                 continue
+            
             print("List of Boardgames")
             for i in range(len(data)):
-                print(f"{i +1}) {data[i]['name']} ({data[i]['year']})")
+                print(f" {i +1}) {data[i]['name']} ({data[i]['year']})")
 
         case 's':
             #Serch for Boardgames through name and description 
@@ -234,7 +233,7 @@ while True:
 
             print("Search results: ")
             for i in range(len(search_results)):
-                print(f"{search_results[i][0] + 1}) {search_results[i][1]['name']} ({search_results[i][1]['year']})")
+                print(f" {search_results[i][0] + 1}) {search_results[i][1]['name']} ({search_results[i][1]['year']})")
 
         case 'v':
             #View a specific Boardgame
@@ -248,10 +247,10 @@ while True:
             #Display results
             print(f"{data[num]['name']} ({data[num]['year']})")
             print(data[num]['desc'])
-            print(f"Players: {data[num]['players'][0]}-{data[num]['players'][1]}")
-            print(f"Playtime: {data[num]['playtime'][0]}-{data[num]['playtime'][1]} minutes")
-            print(f"Age: {data[num]['min_age']}+")
-            print(f"Complexity: {data[num]['complexity']}/5")
+            print(f" Players: {data[num]['players'][0]}-{data[num]['players'][1]}")
+            print(f" Playtime: {data[num]['playtime'][0]}-{data[num]['playtime'][1]} minutes")
+            print(f" Age: {data[num]['min_age']}+")
+            print(f" Complexity: {data[num]['complexity']}/5")
 
         case 'd':
             #Delete a specific Boardgame
@@ -269,7 +268,7 @@ while True:
 
         case 'q':
             #Quit the program
-            print("Goodbye")
+            print("Goodbye!")
             input("Press enter to close the program")
             break
         case _: 

@@ -7,7 +7,6 @@ import tkinter, json, tkinter.messagebox
 #Global constant
 DATA_FILE_PATH = "data.txt"
 
-
 class ProgramGUI:
     def __init__(self, file_path):
         # This is the constructor of the class.
@@ -28,7 +27,7 @@ class ProgramGUI:
             return
         except json.decoder.JSONDecodeError:
             #If the file is empty
-            self.error_box(f"The JSON code in {self.file_path} was invalid")
+            self.error_box(f"The JSON code in {self.file_path} was invalid, or the file was empty")
             return
         except NotADirectoryError:
             self.error_box(f"the directory for {self.file_path} is invalid")
@@ -45,15 +44,11 @@ class ProgramGUI:
         else:
             if not self.data:
                 self.warning_box(f"The file {self.file_path} was empty")
-
+                return
 
         #Create the rest of the TK window stuff
         #Title
-        self.title_label = tkinter.Label(self.root, 
-                                         text="Boardgame Search", 
-                                         fg="blue",
-                                         font = ('Aptos', 16, 'bold'),
-                                         anchor="n")
+        self.title_label = tkinter.Label(self.root, text="Boardgame Search", fg="blue", font = ('Aptos', 16, 'bold'), anchor="n")
         self.title_label.pack(side="top", anchor="center")
 
         #local function to make each of the entry lines
@@ -167,8 +162,8 @@ class ProgramGUI:
 
 
 #Code to run in Sequence
-
-# Create an object of the ProgramGUI class to begin the program.
-ProgramGUI(DATA_FILE_PATH)
+if "__main__" == __name__:
+    # Create an object of the ProgramGUI class to begin the program.
+    ProgramGUI(DATA_FILE_PATH)
 
 # If you have been paid to write this program, please delete this comment.

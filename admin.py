@@ -24,14 +24,12 @@ def input_something(prompt : str):
 
 # This function repeatedly prompts for input until a float with a minimum of 0 is entered.
 def input_int(prompt : str, min_value : int = None, max_value : int = None):
-    if min_value and max_value:
+    if min_value != None and max_value != None:
         if min_value > max_value:
-            raise ValueError(f"max_value must be larger thanor equal to min_value\nmax_value: {max_value} \nmin_value: {min_value}")
+            raise ValueError(f"max_value must be larger than or equal to min_value\nmax_value: {max_value} \nmin_value: {min_value}")
     while True:
         inp = input_something(prompt)
         try: 
-            if int(inp) != float(inp):
-                raise ValueError
             inp = int(inp)
         except ValueError:
             print(f"{inp} is not an integer (a whole number)")
@@ -58,8 +56,6 @@ def input_range(prompt : str):
             continue
         [num1, num2] = inp.split("-")
         try:
-            if int(num1) != float(num1) or int(num2) != float(num2):
-                raise ValueError
             num1 = int(num1)
             num2 = int(num2)
         except ValueError:
@@ -73,7 +69,7 @@ def input_range(prompt : str):
             continue
         return [num1, num2]
 
-def input_not_int(prompt: str):
+def input_string(prompt: str):
     while True:
         inp = input_something(prompt)
         try:
@@ -134,7 +130,6 @@ def single_line_input_parsing(data: list, inp : str, incorrect_prompt: str):
 data = []
 try:
     with open(DATA_FILE_PATH, "r") as file:
-        #If the file is empty
         data = json.load(file)
 except FileNotFoundError:
     #If the file does not exist
@@ -169,7 +164,7 @@ while True:
         case 'a':
             #Add new Boardgame
             new_data = {}
-            new_data['name'] = input_not_int("Enter boardgame name: ")
+            new_data['name'] = input_string("Enter boardgame name: ")
             #The datetime.now().year gets the current year
             #This is becuase a baordgame can't be created in the future
             #but in order to future proof the program the number '2025' cant just be written there
@@ -186,7 +181,7 @@ while True:
                 continue
                     
             #continue collecting game data
-            new_data['desc'] = input_not_int("Enter a short description: ")
+            new_data['desc'] = input_string("Enter a short description: ")
             new_data['players'] = input_range("Enter number of players as a range e.g. 1-4: ")
             new_data['playtime'] = input_range("Enter playtime in minutes as a range e.g. 15-30: ")
             new_data['min_age'] = input_int("Enter the minimum recommended playing age: ", 0)
@@ -203,8 +198,8 @@ while True:
                 continue
             
             print("List of Boardgames")
-            for i in range(len(data)):
-                print(f" {i +1}) {data[i]['name']} ({data[i]['year']})")
+            for i, d in enumerate(data):
+                print(f" {i +1}) {d['name']} ({d['year']})")
 
         case 's':
             #Serch for Boardgames through name and description 
@@ -222,9 +217,9 @@ while True:
 
             #Actually search
             search_results = []
-            for i in range(len(data)):
-                if search_term in data[i]['name'].lower() or search_term in data[i]['desc'].lower():
-                    search_results.append([i, data[i]])
+            for i, d in enumerate(data):
+                if search_term in d['name'].lower() or search_term in d['desc'].lower():
+                    search_results.append([i, d])
 
             #Display results
             if not search_results:
@@ -232,8 +227,8 @@ while True:
                 continue
 
             print("Search results: ")
-            for i in range(len(search_results)):
-                print(f" {search_results[i][0] + 1}) {search_results[i][1]['name']} ({search_results[i][1]['year']})")
+            for i, d in enumerate(search_results):
+                print(f" {d[0] + 1}) {d[1]['name']} ({d[1]['year']})")
 
         case 'v':
             #View a specific Boardgame

@@ -123,7 +123,7 @@ class ProgramGUI:
         self.search_results = []
         for i, game in enumerate(self.data):
             if (((game['players'][0] <= num_players <= game['players'][1]) if num_players != "" else True)
-                and ((game['playtime'][0] <= time_available <= game['playtime'][1]) if time_available != "" else True)
+                and ((game['playtime'][0] <= time_available) if time_available != "" else True)
                 and ((game['min_age'] <= youngest) if youngest != "" else True)):
                 self.search_results += [i]
         

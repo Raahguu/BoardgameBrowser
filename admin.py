@@ -48,13 +48,14 @@ def input_range(prompt : str):
         prompt += "\n> "
     while True:
         inp = input(prompt).strip()
-        if "-" not in inp:
+        numbers = inp.split("-")
+        if len(numbers) == 1:
             print("You need to input a range separated with a '-'")
             continue
-        if inp.count("-") != 1:
+        if len(numbers) != 2:
             print("You can only have one '-', so no negative numbers")
             continue
-        [num1, num2] = inp.split("-")
+        [num1, num2] = numbers
         try:
             num1 = int(num1)
             num2 = int(num2)
